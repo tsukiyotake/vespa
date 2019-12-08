@@ -2,6 +2,7 @@
 #define __VESPA_COORD__
 
 #include "vector.hpp"
+#include "operation/abs.hpp"
 
 namespace vespa {
 
@@ -42,6 +43,16 @@ namespace vespa {
         constexpr value_type const& w()const noexcept { return (*this)[3]; }
         constexpr value_type & w()noexcept { return (*this)[3]; }
     };
+
+    template<class ltype, class rtype, size_t dim>
+    constexpr auto square_distance(coord<ltype, dim> const& lhs, coord<rtype, dim> const& rhs)noexcept {
+        return (lhs - rhs).square();
+    }
+
+    template<class ltype, class rtype, size_t dim>
+    constexpr auto distance(coord<ltype, dim> const& lhs, coord<rtype, dim> const& rhs)noexcept {
+        return (lhs - rhs).magnitude();
+    }
 
 }
 

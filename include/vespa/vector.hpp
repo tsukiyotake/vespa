@@ -3,6 +3,8 @@
 
 #include <array>
 
+#include "operation/sqrt.hpp"
+
 namespace vespa {
 
     template<class type, size_t dim>
@@ -128,6 +130,10 @@ namespace vespa {
     public:
         constexpr value_type square()const noexcept {
             return square(std::make_index_sequence<dimension>());
+        }
+
+        constexpr value_type magnitude()const noexcept {
+            return sqrt(square());
         }
 
     private:
