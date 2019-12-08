@@ -63,6 +63,9 @@ namespace vespa {
         template<size_t ... index>
         constexpr vector inv(std::index_sequence<index...> seq)const noexcept { return vector(-values_[index]..., seq) }
 
+        template<size_t ... index>
+        constexpr vector square(std::index_sequence<index...>)const noexcept { return (values_[index] * values_[index]) + ...; }
+
     public:
         constexpr vector(): values_{} {}
 
@@ -120,6 +123,11 @@ namespace vespa {
         template<class other_type>
         constexpr vector& operator/=(other_type const& rhs)noexcept {
             return idiv(rhs, std::make_index_sequence<dimension>());
+        }
+
+    public:
+        constexpr value_type square()const noexcept {
+            return square(std::make_index_sequence<dimension>());
         }
 
     private:
@@ -196,9 +204,14 @@ namespace vespa {
         }
 
         template<class ltype, class rtype, size_t ... index>
-        inline constexpr auto siv(ltype const& lhs, vector<rtype, sizeof...(index)> const& rhs, std::index_sequence<index...> seq)noexcept {
+        inline constexpr auto div(ltype const& lhs, vector<rtype, sizeof...(index)> const& rhs, std::index_sequence<index...> seq)noexcept {
             using reult_type = decltype(std::declval<ltype>() / std::declval<rtype>());
             return vector<reult_type, sizeof...(index)>((lhs / rhs[index])..., seq);
+        }
+
+        template<class ltype, class rtype, size_t ... index>
+        inline constexpr auto dot(vector<ltype, sizeof...(index)> const& lhs, vector<ltype, sizeof...(index)> const& rhs)noexcept {
+            return (lhs[index] * rhs[index]) + ...;
         }
 
     }
@@ -261,6 +274,11 @@ namespace vespa {
     template<class ltype, class rtype, size_t dim>
     inline constexpr auto operator/(ltype const& lhs, vector<rtype, dim> const& rhs)noexcept {
         return div(lhs, rhs, std::make_index_sequence<dim>());
+    }
+
+    template<class ltype, class rtype, size_t dim>
+    inline constexpr auto dot(vector<ltype, dim> const& lhs, vector<rtype, dim> const& rhs)noexcept {
+        return dot(lhs, rhs, std::make_index_sequence<dim>());
     }
 
 }
