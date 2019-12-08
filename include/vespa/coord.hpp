@@ -1,4 +1,4 @@
-#ifndef __VESPA_COORD__
+﻿#ifndef __VESPA_COORD__
 #define __VESPA_COORD__
 
 #include "vector.hpp"
