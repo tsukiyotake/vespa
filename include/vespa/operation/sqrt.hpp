@@ -11,7 +11,7 @@ namespace vespa {
         auto previous, next;
         do  {
             previous = result;
-            next = (rhs / previous + rhs) / static_cast<type>(2);
+            next = (rhs / previous + previous) / static_cast<type>(2);
             result = next;
         } while(abs(next - previous) > threshold);
 
