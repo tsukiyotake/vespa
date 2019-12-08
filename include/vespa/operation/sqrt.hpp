@@ -7,11 +7,14 @@ namespace vespa {
 
     template<class type, type threshold=static_cast<type>(0.001)>
     constexpr type sqrt(type const& rhs) {
-        auto result = rhs;
-        for (auto next = rhs / static_cast<type>(2); abs(prev - next) <= threshold; result = next)
-        {
-            next = (rhs / result + rhs) / static_cast<type>(2);
-        }
+        auto result =  rhs / static_cast<type>(2);
+        auto previous, next;
+        do  {
+            previous = result;
+            next = (rhs / previous + rhs) / static_cast<type>(2);
+            result = next;
+        } while(abs(next - previous) > threshold);
+
         return result;
     }
 
